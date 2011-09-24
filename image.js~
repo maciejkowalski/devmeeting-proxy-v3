@@ -15,6 +15,8 @@ function convertImage(scrImage, dstImage) {
     }
   });
 
+
+
   var path = "./tmp/";
 
   im.convert([ srcImage , '-resize', '120x120', dstImage ],
@@ -23,6 +25,8 @@ function convertImage(scrImage, dstImage) {
       console.log('stdout:', stdout);
   });
 }
+
+
 
 var http = require("http");
 //var func = require("./func");
@@ -39,6 +43,7 @@ http.createServer(onRequest).listen(12121);
 
 console.log("Server has started.");
 
+
 function testStat() {
   fs.stat("/home/dev/node-cb/costam", function (status, stats) {
     console.log("stats: " + JSON.stringify(stats));
@@ -54,6 +59,16 @@ function testStat() {
       console.log('response.writeHead(200, {"Content-Type": "image/png"});');
       console.log('response.write(file, "binary");');
       console.log('response.end();');
+      console.log(error);
+      console.log(file);
     }
   });
+
+
+  fs.readFile('/etc/passwd', function (err, data) {
+
+    if (err) throw err;
+      console.log(data);
+  });
+
 }
