@@ -1,4 +1,6 @@
 var http = require('http');
+var util = require('util');
+
 
 function onRequest(request, response) {
 
@@ -21,8 +23,10 @@ function getListener(request, response) {
 
 function httpGet( request, response ) {
 
-    var options = {
-        host: "rootnode.net",
+    var hostToGet = "www.joemonster.org";
+    var options = {  
+        
+        host: hostToGet,
         port: 80,
         path: request.url,
         headers: {
@@ -32,30 +36,48 @@ function httpGet( request, response ) {
         method: request.method
     };
 
-    console.log(options);
+    //    console.log(options);
+    //    response.writeHead(200, { "Content-Type:": "text/html; charset=utf8 " } );
 
     var html = http.get(options, function(res ) {
-        console.log("Got response: " + res.statusCode);
-    //response.write( res );
-    }).on('error', function(e) {
-        console.log("Got error: " + e.message);
-    });
+        //        console.log("Got response: " + res.statusCode);
+        //response.write( res );
+        }).on('error', function(e) {
+        //        console.log("Got error: " + e.message);
+        });
     
     var info = '' ;  
-      
+    
+    
+    
     html.on("response", function(res) {
         res.on("data", function(chunk) {
             info += chunk;
         } );
         
         res.on("end", function() {
-            console.log( info );
-        });
+            //            console.log( info );
+
+            //            console.log( html.res.socket.headers );
+
+            //console.log( html.res.socket ); 
+
+            console.log( html.res.headers['content-type'] );
+            
+           
+      
+            //    info = info.replace( 'href="http://www.joemonster.org', 'href="http://localhost:2222' );
+            //    response.write( info );
+
+            response.write( util.inspect( html.res.headers['content-type'] )  );
+
+
+        });    
     } ); 
     
-    console.log(html)
-    console.log( html.output );
-    
+//    console.log(html)
+//    console.log( html.output );
+        
 
 //    request.content = '';
 //    request.addListener('data', function(chunk) {
@@ -107,6 +129,15 @@ function sleep(milliseconds) {
     }
 };
 
-
+function doSomethingWithResponse( html , response, info) {
+    
+    console.log( html.res.socket ); 
+    console.log( html.res.socket.headers  );
+      
+    info = info.replace( 'href="http://www.joemonster.org', 'href="http://localhost:2222' );
+    response.write( info );
+    
+    
+}
 
 exports.onRequest = onRequest; 
